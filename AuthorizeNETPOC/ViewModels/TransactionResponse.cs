@@ -16,5 +16,6 @@ namespace AuthorizeNETPOC.ViewModels
         public string ServiceName { get; set; } //Name of PaymentGateway
         public string TransactionStatus { get; set; }
         public string TransactionId { get; set; }
+        public decimal amount { get; set; }
     }
 }

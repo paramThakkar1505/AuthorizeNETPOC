@@ -7,7 +7,7 @@ namespace AuthorizeNETPOC
 {
     public class Constants
     {
-        public const string ApiLoginID = "5KP3u95bQpv";
-        public const string ApiTransactionKey = "346HZ32z3fP4hTG2";
+        public const string ApiLoginID = "67XyA262mx";
+        public const string ApiTransactionKey = "5227zBMmNb25P7s8";
     }
 }

@@ -18,22 +18,25 @@ namespace AuthorizeNETPOC.Controllers
     [ApiVersion("1")]
     public class AnkitPocController : ControllerBase
     {
+        public AnkitPocController()
+        {
+            // set whether to use the sandbox environment, or production enviornment
+            ApiOperationBase<ANetApiRequest, ANetApiResponse>.RunEnvironment = AuthorizeNet.Environment.SANDBOX;
+            // define the merchant information (authentication / transaction id)
+            ApiOperationBase<ANetApiRequest, ANetApiResponse>.MerchantAuthentication = new merchantAuthenticationType()
+            {
+                name = Constants.ApiLoginID,
+                ItemElementName = ItemChoiceType.transactionKey,
+                Item = Constants.ApiTransactionKey
+            };
+        }
+
+
         [HttpPost("createcustomerprofile")]
         public IActionResult CreateCustomerProfile(CustomerProfileModel customerProfilemodel)
         {
             try
             {
-                // set whether to use the sandbox environment, or production enviornment
-                ApiOperationBase<ANetApiRequest, ANetApiResponse>.RunEnvironment = AuthorizeNet.Environment.SANDBOX;
-
-                // define the merchant information (authentication / transaction id)
-                ApiOperationBase<ANetApiRequest, ANetApiResponse>.MerchantAuthentication = new merchantAuthenticationType()
-                {
-                    name = Constants.ApiLoginID,
-                    ItemElementName = ItemChoiceType.transactionKey,
-                    Item = Constants.ApiTransactionKey,
-                };
-
                 var creditCard = new creditCardType
                 {
                     cardNumber = customerProfilemodel.CreditCard.CardNumber,
@@ -141,16 +144,6 @@ namespace AuthorizeNETPOC.Controllers
         {
             try
             {
-                ApiOperationBase<ANetApiRequest, ANetApiResponse>.RunEnvironment = AuthorizeNet.Environment.SANDBOX;
-
-                // define the merchant information (authentication / transaction id)
-                ApiOperationBase<ANetApiRequest, ANetApiResponse>.MerchantAuthentication = new merchantAuthenticationType()
-                {
-                    name = Constants.ApiLoginID,
-                    ItemElementName = ItemChoiceType.transactionKey,
-                    Item = Constants.ApiTransactionKey
-                };
-
                 //create a customer payment profile
                 customerProfilePaymentType profileToCharge = new customerProfilePaymentType();
                 profileToCharge.customerProfileId = authTransactionModel.CustomerProfileId;
@@ -248,16 +241,6 @@ namespace AuthorizeNETPOC.Controllers
             try
             {
                 Console.WriteLine("Void Transaction");
-
-                ApiOperationBase<ANetApiRequest, ANetApiResponse>.RunEnvironment = AuthorizeNet.Environment.SANDBOX;
-
-                // define the merchant information (authentication / transaction id)
-                ApiOperationBase<ANetApiRequest, ANetApiResponse>.MerchantAuthentication = new merchantAuthenticationType()
-                {
-                    name = Constants.ApiLoginID,
-                    ItemElementName = ItemChoiceType.transactionKey,
-                    Item = Constants.ApiTransactionKey
-                };
 
                 var transactionRequest = new transactionRequestType
                 {

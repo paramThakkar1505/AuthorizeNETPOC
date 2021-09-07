@@ -247,12 +247,12 @@ namespace AuthorizeNETPOC.Controllers
 
         [HttpPost("PaymentProfile/{customerProfileId}")]
         [ProducesResponseType(typeof(ViewModels.CustomerPaymentProfile), (int)HttpStatusCode.OK)]
-        public ViewModels.CustomerPaymentProfile paymentProfile(string customerProfileId)
+        public ViewModels.CustomerPaymentProfile paymentProfile(string customerProfileId , string cardNumber , string expirationDate)
         {
             var creditCard = new creditCardType
             {
-                cardNumber = "4111111111111111",
-                expirationDate = "1028"
+                cardNumber = cardNumber,// "4111111111111111",
+                expirationDate = expirationDate // "1028"
             };
 
             paymentType cc = new paymentType { Item = creditCard };

@@ -8,5 +8,6 @@ namespace AuthorizeNETPOC.ViewModels
     public class CustomerPaymentProfile
     {
         public string paymentProfileId { get; set; }
+        public string profileId { get; set; }
     }
 }

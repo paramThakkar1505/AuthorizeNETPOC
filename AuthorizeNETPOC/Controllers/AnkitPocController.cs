@@ -327,5 +327,74 @@ namespace AuthorizeNETPOC.Controllers
                 throw ex;
             }
         }
+
+        [HttpDelete("customerpaymentprofile")]
+        public IActionResult CustomerPaymentProfile(CustomerPaymentProfile customerPaymentProfile)
+        {
+            try
+            {
+                Console.WriteLine("DeleteCustomerPaymentProfile Sample");
+
+                //please update the subscriptionId according to your sandbox credentials
+                var request = new deleteCustomerPaymentProfileRequest
+                {
+                    customerProfileId = customerPaymentProfile.profileId,
+                    customerPaymentProfileId = customerPaymentProfile.profileId
+                };
+
+                //Prepare Request
+                var controller = new deleteCustomerPaymentProfileController(request);
+                controller.Execute();
+
+                //Send Request to EndPoint
+                deleteCustomerPaymentProfileResponse response = controller.GetApiResponse();
+                if (response != null && response.messages.resultCode == messageTypeEnum.Ok)
+                {
+                    if (response != null && response.messages.message != null)
+                    {
+                        Console.WriteLine("Success, ResultCode : " + response.messages.resultCode.ToString());
+                        return StatusCode((int)HttpStatusCode.OK,
+                                    JsonConvert.SerializeObject(
+                                            new TransactionResponse
+                                            {
+                                                Note = response.messages.ToString(),
+                                                ReferenceNumber = response.refId,
+                                                ResponseMessage = "",
+                                                ServiceName = "Authorize .net",
+                                                TransactionStatus = response.messages.ToString()
+                                            })
+                                            );
+                    }
+                }
+                else if (response != null)
+                {
+                    return StatusCode((int)HttpStatusCode.OK,
+                                JsonConvert.SerializeObject(
+                                        new TransactionResponse
+                                        {
+                                            Note = response.messages.message[0].text,
+                                            ResponseCode = response.messages.message[0].code,
+                                            ResponseMessage = "Error",
+                                            ServiceName = "Authorize .net",
+                                            TransactionStatus = "Failed Transaction.",
+                                        })
+                                        );
+                }
+
+                return StatusCode((int)HttpStatusCode.OK,
+                                JsonConvert.SerializeObject(
+                                        new TransactionResponse
+                                        {
+                                            ResponseMessage = "Error",
+                                            ServiceName = "Authorize .net",
+                                            TransactionStatus = "Null Responese.",
+                                        })
+                                        );
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

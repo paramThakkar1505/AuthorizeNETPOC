@@ -43,50 +43,49 @@ namespace AuthorizeNETPOC.Controllers
                     expirationDate = customerProfilemodel.CreditCard.ExpiryMonth + customerProfilemodel.CreditCard.ExpiryYear
                 };
 
-                var bankAccount = new bankAccountType
-                {
-                    accountNumber = customerProfilemodel.BankAccount.AccountNumber,
-                    routingNumber = customerProfilemodel.BankAccount.RoutingNumber,
-                    accountType = bankAccountTypeEnum.checking,
-                    echeckType = echeckTypeEnum.WEB,
-                    nameOnAccount = customerProfilemodel.BankAccount.NameOnAccount,
-                    bankName = customerProfilemodel.BankAccount.BankName
-                };
+                //var bankAccount = new bankAccountType
+                //{
+                //    accountNumber = customerProfilemodel.BankAccount.AccountNumber,
+                //    routingNumber = customerProfilemodel.BankAccount.RoutingNumber,
+                //    accountType = bankAccountTypeEnum.checking,
+                //    echeckType = echeckTypeEnum.WEB,
+                //    nameOnAccount = customerProfilemodel.BankAccount.NameOnAccount,
+                //    bankName = customerProfilemodel.BankAccount.BankName
+                //};
 
                 // standard api call to retrieve response
                 paymentType cc = new paymentType { Item = creditCard };
-                paymentType echeck = new paymentType { Item = bankAccount };
 
                 List<customerPaymentProfileType> paymentProfileList = new List<customerPaymentProfileType>();
                 customerPaymentProfileType ccPaymentProfile = new customerPaymentProfileType();
                 ccPaymentProfile.payment = cc;
 
-                customerPaymentProfileType echeckPaymentProfile = new customerPaymentProfileType();
-                echeckPaymentProfile.payment = echeck;
+                //customerPaymentProfileType echeckPaymentProfile = new customerPaymentProfileType();
+                //echeckPaymentProfile.payment = echeck;
 
                 paymentProfileList.Add(ccPaymentProfile);
-                paymentProfileList.Add(echeckPaymentProfile);
+                //paymentProfileList.Add(echeckPaymentProfile);
 
-                List<customerAddressType> addressInfoList = new List<customerAddressType>();
-                customerAddressType homeAddress = new customerAddressType();
-                homeAddress.address = customerProfilemodel.CustomerHomeAddress.Address;
-                homeAddress.city = customerProfilemodel.CustomerHomeAddress.City;
-                homeAddress.zip = customerProfilemodel.CustomerHomeAddress.Zip;
+                //List<customerAddressType> addressInfoList = new List<customerAddressType>();
+                //customerAddressType homeAddress = new customerAddressType();
+                //homeAddress.address = customerProfilemodel.CustomerHomeAddress.Address;
+                //homeAddress.city = customerProfilemodel.CustomerHomeAddress.City;
+                //homeAddress.zip = customerProfilemodel.CustomerHomeAddress.Zip;
 
-                customerAddressType officeAddress = new customerAddressType();
-                officeAddress.address = customerProfilemodel.CustomerOfficeAddress.Address;
-                officeAddress.city = customerProfilemodel.CustomerOfficeAddress.City;
-                officeAddress.zip = customerProfilemodel.CustomerOfficeAddress.Zip;
+                //customerAddressType officeAddress = new customerAddressType();
+                //officeAddress.address = customerProfilemodel.CustomerOfficeAddress.Address;
+                //officeAddress.city = customerProfilemodel.CustomerOfficeAddress.City;
+                //officeAddress.zip = customerProfilemodel.CustomerOfficeAddress.Zip;
 
-                addressInfoList.Add(homeAddress);
-                addressInfoList.Add(officeAddress);
+                //addressInfoList.Add(homeAddress);
+                //addressInfoList.Add(officeAddress);
 
 
                 customerProfileType customerProfile = new customerProfileType();
                 customerProfile.merchantCustomerId = customerProfilemodel.CustomerProfileType.MerchantCustomerId;
-                customerProfile.email = customerProfilemodel.CustomerProfileType.Email;
+                //customerProfile.email = customerProfilemodel.CustomerProfileType.Email;
                 customerProfile.paymentProfiles = paymentProfileList.ToArray();
-                customerProfile.shipToList = addressInfoList.ToArray();
+                //customerProfile.shipToList = addressInfoList.ToArray();
 
                 var request = new createCustomerProfileRequest { profile = customerProfile, validationMode = validationModeEnum.none };
 
@@ -107,7 +106,7 @@ namespace AuthorizeNETPOC.Controllers
                             Console.WriteLine("Success!");
                             Console.WriteLine("Customer Profile ID: " + response.customerProfileId);
                             Console.WriteLine("Payment Profile ID: " + response.customerPaymentProfileIdList[0]);
-                            Console.WriteLine("Shipping Profile ID: " + response.customerShippingAddressIdList[0]);
+                            //Console.WriteLine("Shipping Profile ID: " + response.customerShippingAddressIdList[0]);
                         }
                     }
                     else
@@ -177,14 +176,15 @@ namespace AuthorizeNETPOC.Controllers
                                             new TransactionResponse
                                             {
                                                 AuthorizationCode = response.transactionResponse.authCode,
-                                                CardType = "",
+                                                CardType = response.transactionResponse.accountType,
                                                 Note = response.transactionResponse.messages[0].description,
-                                                ReferenceNumber = "",
+                                                ReferenceNumber = response.transactionResponse.refTransID,
                                                 ResponseCode = response.transactionResponse.responseCode,
                                                 ResponseMessage = "",
                                                 ServiceName = "Authorize .net",
                                                 TransactionId = response.transactionResponse.transId,
-                                                TransactionStatus = "Success Transaction.",
+                                                TransactionStatus = response.transactionResponse.messages[0].description,
+                                                amount = authTransactionModel.Amount
                                             })
                                             );
                         }
@@ -269,14 +269,14 @@ namespace AuthorizeNETPOC.Controllers
                                             new TransactionResponse
                                             {
                                                 AuthorizationCode = response.transactionResponse.authCode,
-                                                CardType = "",
+                                                CardType = response.transactionResponse.accountType,
                                                 Note = response.transactionResponse.messages[0].description,
-                                                ReferenceNumber = "",
+                                                ReferenceNumber = response.transactionResponse.refTransID,
                                                 ResponseCode = response.transactionResponse.responseCode,
                                                 ResponseMessage = "",
                                                 ServiceName = "Authorize .net",
                                                 TransactionId = response.transactionResponse.transId,
-                                                TransactionStatus = "Success Transaction.",
+                                                TransactionStatus = response.transactionResponse.messages[0].description
                                             })
                                             );
                         }

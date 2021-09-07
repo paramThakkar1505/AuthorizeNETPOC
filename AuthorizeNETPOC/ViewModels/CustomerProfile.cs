@@ -9,9 +9,9 @@ namespace AuthorizeNETPOC.ViewModels
     public class CustomerProfileModel
     {
         public CreditCard CreditCard { get; set; }
-        public BankAccount BankAccount { get; set; }
-        public HomeAddressModel CustomerHomeAddress { get; set; }
-        public OfficeAddressModel CustomerOfficeAddress { get; set; }
+        //public BankAccount BankAccount { get; set; }
+        //public HomeAddressModel CustomerHomeAddress { get; set; }
+        //public OfficeAddressModel CustomerOfficeAddress { get; set; }
         public CustomerProfileTypeModel CustomerProfileType { get; set; }
     }
 

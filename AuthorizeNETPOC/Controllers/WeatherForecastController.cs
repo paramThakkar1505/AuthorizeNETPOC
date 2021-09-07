@@ -3,12 +3,14 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace AuthorizeNETPOC.Controllers
 {
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-    [Route("[controller]")]
+    [ApiVersion("1")]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
@@ -24,6 +26,7 @@ namespace AuthorizeNETPOC.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(WeatherForecast), (int)HttpStatusCode.OK)]
         public IEnumerable<WeatherForecast> Get()
         {
             var rng = new Random();
